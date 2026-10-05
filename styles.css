@@ -1,0 +1,535 @@
+/* Variables */
+
+:root {
+  --wall: #13211d;
+  --door: #e5322d;
+  --bone: #efe9df;
+  --ink:  #13211d;
+  --mute: #55665d;
+
+  --big:   'Archivo', 'Arial Narrow', Impact, sans-serif;
+  --serif: 'Instrument Serif', Georgia, serif;
+
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Base */
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+html {
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+
+  /* Hide the scrollbar but keep scrolling working */
+  -ms-overflow-style: none;   /* IE and old Edge */
+  scrollbar-width: none;      /* Firefox */
+  overflow-y: auto;
+}
+
+/* Chrome, Safari, newer Edge */
+html::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  margin: 0;
+  background: var(--wall);
+  color: var(--bone);
+  font-family: var(--big);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Added by JS while the loader is showing */
+body.lock {
+  overflow: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--door);
+  outline-offset: 4px;
+}
+
+/* Loader */
+
+#ld {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+}
+
+/* The two halves that slide apart when loading finishes */
+#ld .h {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50.3%;
+  background: var(--wall);
+  transition: transform 0.95s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+#ld .t { top: 0; }
+#ld .b { bottom: 0; }
+
+#ld .c {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  transition: opacity 0.35s;
+}
+
+#ld .n {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 30px;
+  color: var(--bone);
+}
+
+#ld .bar {
+  width: 170px;
+  height: 2px;
+  background: rgba(239, 233, 223, 0.16);
+  overflow: hidden;
+}
+
+#ld .bar u {
+  display: block;
+  height: 100%;
+  background: var(--door);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+#ld .pct {
+  font-size: 13px;
+  color: #8fa097;
+  font-variant-numeric: tabular-nums;
+  min-height: 1.5em;
+}
+
+/* Loading finished: open the doors */
+#ld.done .t { transform: translateY(-101%); }
+#ld.done .b { transform: translateY(101%); }
+#ld.done .c { opacity: 0; }
+
+
+/* Nav */
+
+nav {
+  position: fixed;
+  top: env(safe-area-inset-top, 0px);
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px clamp(16px, 3vw, 40px);
+  font-size: 15px;
+  font-weight: 500;
+  color: #fff;
+  mix-blend-mode: difference;
+}
+
+nav div {
+  display: flex;
+  gap: 28px;
+}
+
+nav a:hover {
+  opacity: 0.6;
+}
+
+
+/* Hero */
+
+/* Tall wrapper gives the sticky hero room to scroll through */
+.gate {
+  height: 340vh;
+  position: relative;
+}
+
+.hero {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  min-height: 520px;
+  overflow: hidden;
+}
+
+#door {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.ov {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ov h1 {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.1em;
+  margin: 0;
+  text-align: center;
+  white-space: nowrap;
+  font-stretch: 62%;
+  font-weight: 850;
+  text-transform: uppercase;
+  font-size: 14.3vw;
+  line-height: 0.82;
+}
+
+.tag {
+  position: absolute;
+  left: clamp(16px, 3vw, 40px);
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+  max-width: 8.5em;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(32px, 4vw, 64px);
+  line-height: 1.02;
+}
+
+.hint {
+  position: absolute;
+  right: clamp(16px, 3vw, 40px);
+  top: 50%;
+  margin: 0;
+  color: #8fa097;
+  font-size: 15px;
+  text-align: right;
+}
+
+/* The overlay ignores the mouse, but these bits still need it */
+.tag,
+.hint,
+.ov h1 {
+  pointer-events: auto;
+}
+
+
+/* Sections below the hero */
+
+.after {
+  background: var(--bone);
+  color: var(--ink);
+}
+
+section {
+  padding: clamp(80px, 12vw, 180px) clamp(16px, 3vw, 40px) 0;
+}
+
+.after section:first-child {
+  padding-top: clamp(70px, 9vw, 130px);
+}
+
+h2 {
+  margin: 0 0 clamp(28px, 5vw, 64px);
+  font-stretch: 62%;
+  font-weight: 850;
+  text-transform: uppercase;
+  font-size: clamp(64px, 13vw, 220px);
+  line-height: 0.85;
+}
+
+
+/* Project rows */
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 8px 32px;
+  padding: clamp(18px, 2.4vw, 34px) 0;
+  border-top: 1px solid rgba(19, 33, 29, 0.22);
+  transition: padding 0.35s, color 0.25s;
+}
+
+.row:last-of-type {
+  border-bottom: 1px solid rgba(19, 33, 29, 0.22);
+}
+
+.row b {
+  font-stretch: 62%;
+  font-weight: 850;
+  text-transform: uppercase;
+  font-size: clamp(52px, 11vw, 190px);
+  line-height: 0.92;
+}
+
+.row span {
+  color: var(--mute);
+  font-size: 15px;
+  text-align: right;
+  max-width: 28ch;
+}
+
+.row:hover,
+.row:focus-visible {
+  padding-left: clamp(12px, 3vw, 48px);
+  color: var(--door);
+  outline: none;
+}
+
+/* "Coming soon" rows get outlined text instead of solid */
+.row.soon b {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--ink);
+}
+
+.row.soon:hover b {
+  -webkit-text-stroke-color: var(--door);
+}
+
+
+/* Notes, columns, about */
+
+.note {
+  max-width: 48ch;
+  margin: 28px 0 0;
+  font-family: var(--serif);
+  font-size: clamp(22px, 2.4vw, 32px);
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+.cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 40px;
+}
+
+.cols h3 {
+  margin: 0 0 10px;
+  font-stretch: 75%;
+  font-weight: 800;
+  font-size: clamp(28px, 3.4vw, 48px);
+  line-height: 1;
+}
+
+.cols p {
+  margin: 0;
+  color: var(--mute);
+  max-width: 34ch;
+}
+
+.about {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 40px;
+  align-items: end;
+}
+
+.about p {
+  margin: 0;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(30px, 3.6vw, 56px);
+  line-height: 1.05;
+  max-width: 16em;
+}
+
+/* Second paragraph switches to the plain body style */
+.about p + p {
+  font-family: var(--big);
+  font-style: normal;
+  color: var(--mute);
+  font-size: 16px;
+  line-height: 1.55;
+  max-width: 44ch;
+}
+
+
+/* Contact + footer */
+
+.contact {
+  margin-top: clamp(80px, 12vw, 180px);
+  background: var(--door);
+  color: var(--bone);
+  padding-bottom: 0;
+}
+
+.contact h2 {
+  margin-bottom: 24px;
+}
+
+.mail {
+  display: inline-block;
+  font-stretch: 75%;
+  font-weight: 700;
+  font-size: clamp(26px, 5vw, 72px);
+  line-height: 1.1;
+  border-bottom: 3px solid var(--bone);
+}
+
+.mail:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+footer {
+  margin-top: clamp(60px, 8vw, 120px);
+  padding: 20px 0 28px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 14px;
+  border-top: 1px solid rgba(239, 233, 223, 0.4);
+}
+
+
+/* Custom cursor */
+
+/* Hide the real cursor once the custom one is active */
+html.cc,
+html.cc * {
+  cursor: none !important;
+}
+
+#cur {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 60;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+#cur i {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  transform: translate(-50%, -50%);
+  transition:
+    width 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    height 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    background 0.25s,
+    opacity 0.25s;
+}
+
+#cur b {
+  font: 600 14px var(--big);
+  color: var(--bone);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+/* Cursor states */
+#cur.text i {
+  width: 92px;
+  height: 92px;
+}
+
+#cur.link {
+  mix-blend-mode: normal;
+}
+
+#cur.link i {
+  width: 92px;
+  height: 92px;
+  background: var(--door);
+}
+
+#cur.link b {
+  opacity: 1;
+}
+
+#cur.proj i {
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+
+/* Project preview (hover image) */
+
+#pv {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 55;
+  pointer-events: none;
+  width: min(36vw, 520px);
+}
+
+#pv div {
+  line-height: 0;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #140d09;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+  transform: translate(-50%, -50%) scale(0.8);
+  opacity: 0;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s;
+}
+
+#pv.on div {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+
+#pv img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+
+/* Mobile */
+
+@media (max-width: 640px) {
+  .tag {
+    top: 84px;
+    transform: none;
+  }
+
+  .hint {
+    display: none;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+  }
+
+  .row span {
+    text-align: left;
+  }
+
+  nav div {
+    gap: 16px;
+  }
+}
